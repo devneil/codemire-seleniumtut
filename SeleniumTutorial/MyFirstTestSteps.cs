@@ -1,9 +1,5 @@
-﻿using System;
-using System.Threading;
-using FluentAssertions;
-using OpenQA.Selenium;
+﻿using FluentAssertions;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Support.UI;
 using TechTalk.SpecFlow;
 
 namespace SeleniumTutorial
