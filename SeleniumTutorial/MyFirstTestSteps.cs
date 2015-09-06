@@ -31,6 +31,7 @@ namespace SeleniumTutorial
         public void ThenIShouldSeeAnImage()
         {
             _driver.FindElementsByTagName("img").Count.Should().BeGreaterThan(0);
+            _driver.Dispose();
         }
 
     }
