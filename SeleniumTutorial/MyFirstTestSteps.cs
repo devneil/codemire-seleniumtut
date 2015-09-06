@@ -1,4 +1,9 @@
-﻿using FluentAssertions;
+﻿using System;
+using System.Drawing.Imaging;
+using System.Text.RegularExpressions;
+using FluentAssertions;
+using NUnit.Framework;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using TechTalk.SpecFlow;
 
@@ -18,7 +23,27 @@ namespace SeleniumTutorial
         [AfterScenario]
         public void TearDown()
         {
+            if (TestContext.CurrentContext.Result.Status == TestStatus.Failed)
+            {
+                string filename = CleanFileName(GetTestName());
+                _driver.GetScreenshot().SaveAsFile(filename + ".jpg", ImageFormat.Jpeg);
+            }
+
             _driver.Dispose();
+        }
+
+        private string GetTestName()
+        {
+            return TestContext.CurrentContext.Test.Name;
+        }
+
+        private string CleanFileName(string fname)
+        {
+            string invalidChars = Regex.Escape(new string(System.IO.Path.GetInvalidFileNameChars()));
+            string invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
+
+            return Regex.Replace(fname, invalidRegStr, "_");
+
         }
 
         [Given(@"I can navigate to Google")]
@@ -38,6 +63,7 @@ namespace SeleniumTutorial
         public void ThenIShouldSeeAnImage()
         {
             _driver.FindElementsByTagName("img").Count.Should().BeGreaterThan(0);
+            throw new Exception();
         }
 
     }
