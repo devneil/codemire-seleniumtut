@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using NUnit.Framework;
 using OpenQA.Selenium.Chrome;
 using TechTalk.SpecFlow;
 
@@ -9,10 +10,21 @@ namespace SeleniumTutorial
     {
         private ChromeDriver _driver;
 
+        [BeforeScenario]
+        public void SetUp()
+        {
+            _driver = new ChromeDriver();   
+        }
+
+        [AfterScenario]
+        public void TearDown()
+        {
+            _driver.Dispose();
+        }
+
         [Given(@"I can navigate to Google")]
         public void GivenICanNavigateToGoogle()
         {
-            _driver = new ChromeDriver();
             _driver.Navigate().GoToUrl("http://google.com");
         }
 
@@ -27,7 +39,6 @@ namespace SeleniumTutorial
         public void ThenIShouldSeeAnImage()
         {
             _driver.FindElementsByTagName("img").Count.Should().BeGreaterThan(0);
-            _driver.Dispose();
         }
 
     }
